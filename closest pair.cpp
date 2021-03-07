@@ -1,6 +1,24 @@
 #include <bits/stdc++.h>
 #include<windows.h> 
+#include<windows.h>
+#include<stdio.h>
+#include<stdlib.h>
 using namespace std; 
+
+#define LT 218
+#define RT 191
+#define CROSS 197
+#define HL 196
+#define VL 179
+#define TT 194
+#define BT 193
+#define LST 195
+#define RST 180
+#define LB 192
+#define RB 217
+
+#define BS 8
+#define SPACE 32
 
 #define min(x,y) ((x) < (y))? (x) : (y)
 
@@ -19,15 +37,18 @@ float stripClosest(Point strip[], int size, float d) ;
 int abs(int x) ;
 float closestUtil(Point P[], int n) ;
 float closest(Point P[], int n) ;
+void gotoxy(int x, int y);
+void drawGraph();
+void plotPoints(Point P[],int n);
 
 int main() 
 { 
 	Point P[100];
-	/*P[0].x=0.5;
-	P[0].y=0.3;
-	P[1].x=0.9;
-	P[1].y=0.3;
-	P[2].x=0.63;
+	/*P[0].x=0.6;
+	P[0].y=0.4;
+	P[1].x=1.0;
+	P[1].y=0.4;
+	P[2].x=0.65;
 	P[2].y=0.38;
 	P[3].x=0.03;
 	P[3].y=0.49;*/
@@ -35,11 +56,16 @@ int main()
 	//P[1].setXY(5,4); 
 	for(int i=0;i<100;i++){
 		P[i].x=(rand()%100)/float(100);
-		//cout<<P[i].x<<" ";
+		//cout<<P[i].x<<"  ";
 		P[i].y=(rand()%100)/float(100);
 		//cout<<P[i].y<<"\n";
 	}
-	int n = sizeof(P) / sizeof(P[0]); 
+	
+	drawGraph();
+	
+	int n = sizeof(P) / sizeof(P[0]);
+	plotPoints(P,n); 
+	gotoxy(0,30);
 	cout << "The Smallest Distance among the " << n << " random points is : " << closest(P, n) << endl; 
 	cout << "The Closest Points are : " << endl;
 	cout << points[0].x << "," << points[0].y << endl;
@@ -138,3 +164,71 @@ float closest(Point P[], int n)
 	return closestUtil(P, n); 
 } 
 
+void gotoxy(int x, int y)
+{
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+void drawGraph()
+{
+	int X=10,Y=5;
+	float val=0;
+	for(int i=0;i<21;i++,Y++){
+		gotoxy(X,Y);
+		cout << char(VL);
+	}
+	gotoxy(X,Y);
+	cout << char(LB);
+	X+=1;
+	
+	for(int i=0;i<52;i++,X++)
+	{
+		gotoxy(X,Y);
+		cout << char(HL);
+	}
+	X=12;
+	for(int i=0;i<6;i++,X+=10)
+	{
+		gotoxy(X,Y);
+		cout << char(TT);
+	}
+	Y+=1;
+	X=11;
+	for(int i=0;i<6;i++,X+=10)
+	{
+		gotoxy(X,Y);
+		printf("%0.1f",val/10);
+		val+=2;
+	}
+	X=10;
+	Y=5;
+	for(int i=0;i<6;i++,Y+=4)
+	{
+		gotoxy(X,Y);
+		cout << char(RST);
+	}
+	X=6;
+	Y=5;
+	val=10;
+	for(int i=0;i<6;i++,Y+=4)
+	{
+		gotoxy(X,Y);
+		printf("%0.1f",val/10);
+		val-=2;
+	}
+	
+	gotoxy(X,Y+5);
+}
+
+void plotPoints(Point P[],int n)
+{
+	int X=12,Y=25;
+	for(int i=0;i<n;i++)
+	{
+		gotoxy(X+(P[i].x)*50,Y-(P[i].y)*20);
+		cout << ".";
+	}
+}
